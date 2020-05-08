@@ -9,6 +9,8 @@
 import Cocoa
 import SwiftUI
 
+
+//Main entry point of the application
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -20,7 +22,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var eventMonitor: EventMonitor?
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        
         // Create the SwiftUI view that provides the window contents.
+//        Create window, might need in future versions
 //        let contentView = ContentView()
 //
 //        // Create the window and set the content view.
@@ -49,17 +53,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func statusBarButtonClicked(_ sender: Any?){
-        print("in")
         let event = NSApp.currentEvent!
         print(event.type, NSEvent.EventType.rightMouseUp)
-        if event.type == NSEvent.EventType.rightMouseUp {
-            print("in1")
-            constructMenu()
-        } else {
-            print("in2")
-            togglePopover(nil)
-        }
-    }
+//        if event.type == NSEvent.EventType.rightMouseUp {
+//            constructMenu()
+//        } else {
+        togglePopover(nil)
+//       }
+   }
     
     func togglePopover(_ sender: Any?) {
       if popover.isShown {
@@ -83,20 +84,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       popover.performClose(sender)
         eventMonitor?.stop()
     }
-    
-    func constructMenu() {
-      let menu = NSMenu()
 
-      menu.addItem(NSMenuItem(title: "Reset Statistics", action: #selector(AppDelegate.resetData(_:)), keyEquivalent: "r"))
-      menu.addItem(NSMenuItem.separator())
-      menu.addItem(NSMenuItem(title: "Quit LC Time", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-
-      statusItem.menu = menu
-    }
-    
-    @objc func resetData(_ sender: Any?){
-        UserDefaults.standard.removeObject(forKey: "Record")
-    }
+//Supposed to construct right click status icon menu, but not working, maybe add in future revision
+//    func constructMenu() {
+//      let menu = NSMenu()
+//
+//      menu.addItem(NSMenuItem(title: "Reset Statistics", action: #selector(AppDelegate.resetData(_:)), keyEquivalent: "r"))
+//      menu.addItem(NSMenuItem.separator())
+//      menu.addItem(NSMenuItem(title: "Quit LC Time", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+//
+//      statusItem.menu = menu
+//    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application

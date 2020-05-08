@@ -17,6 +17,13 @@ class LCTimeTableViewController: NSViewController{
         // Do view setup here.
         tableView.delegate = self
         tableView.dataSource = self
+        
+//        NotificationCenter.defaultCenter.addObserver(self, selector: "refreshTable:", name: "refresh", object: nil)
+//    }
+//
+//    func refreshTable(notification: NSNotification) {
+//        print("Received Notification")
+//        self.tableView.reloadData()
     }
 }
 
@@ -26,7 +33,8 @@ extension LCTimeTableViewController: NSTableViewDataSource {
     let decoder = JSONDecoder()
     var decode: [LCTimeViewController.timeRecord] = []
     let userData = UserDefaults.standard.array(forKey: "Records") as? [Data]
-    for test in userData!{
+    
+    for test in userData! {
         if let rec = try? decoder.decode(LCTimeViewController.timeRecord.self, from: test) {
             decode.append(rec)
         }

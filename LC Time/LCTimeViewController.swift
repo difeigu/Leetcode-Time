@@ -6,6 +6,7 @@
 //  Copyright © 2019 Paul Gu. All rights reserved.
 //
 
+//Interface in popover
 import Cocoa
 
 class LCTimeViewController: NSViewController {
@@ -15,6 +16,8 @@ class LCTimeViewController: NSViewController {
     @IBOutlet var difficultyLable: NSTextField!
     @IBOutlet var difficultySelector: NSPopUpButton!
     @IBOutlet var statisticsButton: NSButton!
+    @IBOutlet var resetButton: NSButton!
+    @IBOutlet var quitButton: NSButton!
     
     struct timeRecord: Codable{
         var date: Date
@@ -35,12 +38,28 @@ class LCTimeViewController: NSViewController {
     static var changesize = 100
     static var difficutiesList: [String] = []
     
+    var run = NSRunningApplication()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
         LCTimeViewController.difficutiesList = difficultySelector.itemTitles
         stopButton.isHidden = true
         showTime()
+        quitButton.action = #selector(closeDown(_:))
+        quitButton.sendAction(on: [.leftMouseUp])
+        resetButton.action = #selector(resetData(_:))
+        resetButton.sendAction(on: [.leftMouseUp])
+    }
+    
+    @objc func resetData(_ sender: Any?){
+        let defaults = UserDefaults.standard
+        defaults.set([], forKey: "Records")
+        print("reset!")
+    }
+    
+    @objc func closeDown(_ sender: Any?){
+        NSApplication.shared.terminate(self)
     }
     
     //start the timer when start button is pressed
@@ -88,7 +107,7 @@ class LCTimeViewController: NSViewController {
         frame.size = newWindowSize
         window.animator().setFrame(frame, display: false)
     }
-    
+
 }
 
 extension LCTimeViewController {
@@ -114,6 +133,8 @@ extension LCTimeViewController {
             difficultyLable.isHidden = true
             difficultySelector.isHidden = true
             statisticsButton.isHidden = true
+            resetButton.isHidden = true
+            quitButton.isHidden = true
             //change size of window to show settings
             if LCTimeViewController.folding == false{
                 LCTimeViewController.resizePopup(changeFrame: LCTimeViewController.changesize, controller: self)
@@ -159,6 +180,8 @@ extension LCTimeViewController {
         difficultyLable.isHidden = false
         difficultySelector.isHidden = false
         statisticsButton.isHidden = false
+        resetButton.isHidden = false
+        quitButton.isHidden = false
         //change size of window to hide settings
         if LCTimeViewController.folding == true{
             LCTimeViewController.resizePopup(changeFrame: -1*LCTimeViewController.changesize, controller: self)
